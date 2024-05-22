@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar } from 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
+import * as Animatable from 'react-native-animatable';
 
 export default function Perfil() {
     const [user, setUser] = useState({ email: '', usuario: '' });
@@ -24,12 +26,6 @@ export default function Perfil() {
         'Raleway-Medium': require('../assets/fonts/Raleway-Medium.ttf'),
         'Raleway-SemiBold': require('../assets/fonts/Raleway-SemiBold.ttf'),
     });
-    
-
-
-
-
-
 
     const onLayoutRootView = useCallback(async () => {
         if (fontsLoaded || fontError) {
@@ -54,100 +50,109 @@ export default function Perfil() {
     }, [isGuest]);
 
     return (
-        <ScrollView>
-            {/* Configurar a cor da barra de status */}
-            <StatusBar backgroundColor="#305BCC" barStyle="light-content" />
-            <View style={styles.container}>
-                <View style={styles.imageUser}></View>
-                {isGuest ? (
-                    <Text style={styles.info1}>Você está logado como convidado.</Text>
-                ) : (
-                    <>
-                        <View style={styles.infoPega}>
-                            <Text style={styles.info1}>{user.usuario}</Text>
-                            <Text style={styles.info2}>{user.email}</Text>
-                        </View>
-                    </>
-                )}
-                <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('login')}>
-                    <Text style={styles.sair}>Sair</Text>
-                </TouchableOpacity>
-                <View style={styles.conteudo}>
-                    <View style={styles.containerInfo}>
-                        <View style={styles.infoCont}>
-                            <Ionicons
-                                name={"bag"}
-                                size={40}
-                                style={styles.iconToggle}
-                            />
-                            <Text style={styles.text1}>
-                                Ultimo Produto
-                            </Text>
-                        </View>
-                        <View style={styles.linha}></View>
-                        <View style={styles.infoCont}>
-                            <Ionicons
-                                name={"cash"}
-                                size={40}
-                                style={styles.iconToggle}
-                            />
-                            <Text style={styles.text1}>
-                                Gastos
-                            </Text>
-
-                        </View>
-                        <View style={styles.linha}></View>
-                        <View style={styles.infoCont}>
-                            <Ionicons
-                                name={"list"}
-                                size={40}
-                                style={styles.iconToggle}
-                            />
-                            <Text style={styles.text1}>
-                                Listas Criadas
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={styles.containerCont2}>
-                        <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('listasCriadas')}>
-                            <View style={styles.cont2}>
-                                <Ionicons
-                                    name={"list"}
-                                    size={25}
-                                    style={styles.iconToggle2}
-                                />
-                                <Text style={styles.textCont2}>Listas Criadas</Text>
-                                <Ionicons
-                                    name="chevron-forward-outline"
-                                    size={25}
-                                    style={styles.iconToggle3}
-                                />
-                            </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView style={styles.scrollView}>
+                {/* Configurar a cor da barra de status */}
+                <Animatable.View animation='fadeInUp' style={styles.tudo}>
+                    <View style={styles.container}>
+                        <View style={styles.imageUser}></View>
+                        {isGuest ? (
+                            <Text style={styles.info1}>Você está logado como convidado.</Text>
+                        ) : (
+                            <>
+                                <View style={styles.infoPega}>
+                                    <Text style={styles.info1}>{user.usuario}</Text>
+                                    <Text style={styles.info2}>{user.email}</Text>
+                                </View>
+                            </>
+                        )}
+                        <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('inicio')}>
+                            <Text style={styles.sair}>Sair</Text>
                         </TouchableOpacity>
-                        <View style={styles.cont2}>
-                            <Ionicons
-                                name={"bag-handle-outline"}
-                                size={25}
-                                style={styles.iconToggle2}
-                            />
-                            <Text style={styles.textCont2}>Promoções</Text>
-                            <Ionicons
-                                name="chevron-forward-outline"
-                                size={25}
-                                style={styles.iconToggle3}
-                            />
+                        <View style={styles.conteudo}>
+                            <View style={styles.containerInfo}>
+                                <View style={styles.infoCont}>
+                                    <Ionicons
+                                        name={"bag"}
+                                        size={40}
+                                        style={styles.iconToggle}
+                                    />
+                                    <Text style={styles.text1}>
+                                        Ultimo Produto
+                                    </Text>
+                                </View>
+                                <View style={styles.linha}></View>
+                                <View style={styles.infoCont}>
+                                    <Ionicons
+                                        name={"cash"}
+                                        size={40}
+                                        style={styles.iconToggle}
+                                    />
+                                    <Text style={styles.text1}>
+                                        Gastos
+                                    </Text>
+
+                                </View>
+                                <View style={styles.linha}></View>
+                                <View style={styles.infoCont}>
+                                    <Ionicons
+                                        name={"list"}
+                                        size={40}
+                                        style={styles.iconToggle}
+                                    />
+                                    <Text style={styles.text1}>
+                                        Listas Criadas
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={styles.containerCont2}>
+                                <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('listasCriadas')}>
+                                    <View style={styles.cont2}>
+                                        <Ionicons
+                                            name={"list"}
+                                            size={25}
+                                            style={styles.iconToggle2}
+                                        />
+                                        <Text style={styles.textCont2}>Listas Criadas</Text>
+                                        <Ionicons
+                                            name="chevron-forward-outline"
+                                            size={25}
+                                            style={styles.iconToggle3}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                                <View style={styles.cont2}>
+                                    <Ionicons
+                                        name={"bag-handle-outline"}
+                                        size={25}
+                                        style={styles.iconToggle2}
+                                    />
+                                    <Text style={styles.textCont2}>Promoções</Text>
+                                    <Ionicons
+                                        name="chevron-forward-outline"
+                                        size={25}
+                                        style={styles.iconToggle3}
+                                    />
+                                </View>
+                            </View>
+                            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.buttonVoltar}>
+                                <Text style={styles.buttonText}>Voltar</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.buttonVoltar}>
-                        <Text style={styles.buttonText}>Voltar</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </ScrollView>
+                </Animatable.View>
+                <StatusBar backgroundColor="#305BCC" barStyle="light-content" />
+
+            </ScrollView>
+        </SafeAreaView>
+
     );
 }
 
 const styles = StyleSheet.create({
+    scrollView: {
+        flex: 1
+    },
     container: {
         flex: 1,
         justifyContent: 'center',

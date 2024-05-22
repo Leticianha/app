@@ -30,11 +30,12 @@ export default function Interface() {
     const [produtoIndex, setProdutoIndex] = useState(null);
     const [listName, setListName] = useState('');
     const [saveListModalVisible, setSaveListModalVisible] = useState(false);
-    const [savedLists, setSavedLists] = useState([]);
+    const [savedLists, setSavedLists] = useState(savedLists || []);
     const [showInstructionsAlert, setShowInstructionsAlert] = useState(true);
     const [user, setUser] = useState({ email: '', usuario: '' });
     const isGuest = route.params?.isGuest || false;
     const username = route.params?.username; // Utiliza o operador de encadeamento opcional
+
 
     useEffect(() => {
         const getUser = async () => {
@@ -72,11 +73,6 @@ export default function Interface() {
 
     // navegar entra as páginas
     const navigation = useNavigation();
-
-
-    // fonte
-
-
 
     // valor alvo - deixar fixo o R$
     const handleChangeText = (text) => {
@@ -228,6 +224,15 @@ export default function Interface() {
         }
     }
 
+    // lógica para colocar reticências quando for muito grande o nome
+    const reticenciaUsuario = (user) => {
+        if (user.length > 5) {
+            return user.substring(0, 5) + '...';
+        } else {
+            return user
+        }
+    }
+
     const openSaveListModal = () => {
         if (produtos.length === 0) {
             Alert.alert('Atenção', 'Não há produtos para salvar.');
@@ -339,23 +344,24 @@ export default function Interface() {
                 <Animatable.View delay={600} animation='fadeInUp' style={styles.container} onLayout={onLayoutRootView}>
                     {/* header */}
                     <View style={styles.header}>
-                        <View style={styles.imageUser}></View>
+                        <View style={styles.containerUser}>
                         {isGuest ? (
-                    <Text style={styles.usuario}>Olá, convidado</Text>
-                ) : (
-                    <>
-                        <Text style={styles.usuario}>Olá, {user.usuario}</Text>
-                        </>
+                            <Text style={styles.usuario}>Olá, User</Text>
+                        ) : (
+                            <>
+                                <Text style={styles.usuario}>Olá, {reticenciaUsuario(user.usuario)}</Text>
+                            </>
                         )}
-                        <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('perfil')}>
+                        <TouchableOpacity style={styles.botaoUser} onPress={() => navigation.navigate('perfil')}>
                             <Ionicons
                                 name={"person-circle-outline"}
                                 size={40}
                                 style={styles.iconToggle2}
                             />
                         </TouchableOpacity>
-                        <View style={styles.logoContainer}>
+                        </View>
 
+                        <View style={styles.logoContainer}>
                             <Image source={require('../assets/logoComFundo.png')} style={styles.logo} />
                         </View>
                     </View>
@@ -675,11 +681,12 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        marginRight: 'auto',
-        marginLeft: 'auto',
-
-
+    },
+    containerUser: {
+        flexDirection: 'column'
+    },
+    botaoUser: {
+        width: 100
     },
     usuario: {
         fontFamily: 'Raleway-SemiBold',
@@ -687,11 +694,6 @@ const styles = StyleSheet.create({
         color: '#000',
         paddingRight: 70
     },
-    iconToggle2: {
-        marginLeft: 'auto', // Empurra para a direita
-        paddingRight: 10
-    },
-
     logoContainer: {
         shadowColor: '#305BCC',
         shadowOffset: {
@@ -707,8 +709,8 @@ const styles = StyleSheet.create({
 
     },
     logo: {
-        width: 90,
-        height: 50,
+        width: 110,
+        height: 60,
     },
     // valor alvo
     textValorAlvo: {
